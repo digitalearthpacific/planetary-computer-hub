@@ -1,6 +1,5 @@
 # Notes on deploying the Planetary Computer Hub to Azure
 
-
 ## State storage 
 
 Set up a storage space for Terraform: https://learn.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli
@@ -78,11 +77,80 @@ AZURE_TENANT_ID="f721524d-ea60-4048-bc46-757d4b5f9fe8"
 ```
 
 Run plan:
+
 ``` bash
-terraform plan \
+terraform -chdir=terraform/dep-staging  plan \
   -var azure_client_id=$AZURE_CLIENT_ID \
   -var azure_client_secret=$AZURE_CLIENT_SECRET \
   -var azure_tenant_id=$AZURE_TENANT_ID \
   -var pc_resources_kv=dep-staging-secrets \
   -var pc_resources_rg=dep-staging
+```
+
+then run apply:
+
+``` bash
+terraform -chdir=terraform/dep-staging  apply \ 
+  -var azure_client_id=$AZURE_CLIENT_ID \
+  -var azure_client_secret=$AZURE_CLIENT_SECRET \
+  -var azure_tenant_id=$AZURE_TENANT_ID \
+  -var pc_resources_kv=dep-staging-secrets \
+  -var pc_resources_rg=dep-staging
+```
+
+This may fail the first time, and you should set up a role assignment
+on the Kubernetes cluster to give the deployer (you, or the system account)
+"Azure Kubernetes Service RBAC Cluster Admin" permissions.
+
+## Connect to k8s
+
+``` bash
+az aks get-credentials --resource-group dep-staging-rg --name dep-staging-cluster
+
+kubectl get pods -A
+```
+
+## Helm chart update
+
+You might need to change into the Helm directory and update the charts with
+`helm dependency update`.
+
+
+## More
+
+Add GPU nodegroup, see [gpu.sh](scripts/gpu.sh)
+
+``` bash
+az feature register --namespace "Microsoft.ContainerService" --name "GPUDedicatedVHDPreview"
+az provider register --namespace Microsoft.ContainerService
+```
+
+Then:
+
+``` bash
+# Workers (dask)
+az aks nodepool add --name gpuworker \
+    --cluster-name dep-staging-cluster \
+    --resource-group dep-staging-rg \
+    --node-vm-size Standard_NC4as_T4_v3 \
+    --enable-cluster-autoscaler \
+    --node-count 0 \
+    --min-count=0 --max-count 25 \
+    --priority Spot \
+    --eviction-policy Delete \
+    --spot-max-price -1 \
+    --aks-custom-headers UseGPUDedicatedVHD=true \
+    --labels k8s.dask.org/dedicated=worker pc.microsoft.com/workerkind=gpu
+
+# Users (Jupyter)
+az aks nodepool add --name gpuuser \
+    --cluster-name dep-staging-cluster \
+    --resource-group dep-staging-rg \
+    --node-vm-size Standard_NC4as_T4_v3 \
+    --enable-cluster-autoscaler \
+    --node-count 0 \
+    --min-count=0 --max-count 25 \
+    --aks-custom-headers UseGPUDedicatedVHD=true \
+    --labels hub.jupyter.org/node-purpose=user hub.jupyter.org/pool-name=user-alpha-pool pc.microsoft.com/userkind=gpu \
+    --node-taints "hub.jupyter.org_dedicated=user:NoSchedule"
 ```

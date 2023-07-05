@@ -32,7 +32,6 @@ variable "aks_automatic_channel_upgrade" {
   description = "automatic_channel_upgrade"
 }
 
-
 variable "oauth_host" {
   type        = string
   description = "The hostname of the oauth2 provider."
