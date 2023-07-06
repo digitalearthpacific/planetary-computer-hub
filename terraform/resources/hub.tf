@@ -18,8 +18,8 @@ resource "helm_release" "dhub" {
   create_namespace = true
 
   values = [
-    "${templatefile("../../helm/chart/config.yaml", { oauth_host = var.oauth_host, jupyterhub_host = var.jupyterhub_host, namespace = var.environment, release = local.helm_release_name })}",
-    "${file("../../helm/jupyterhub_opencensus_monitor.yaml")}",
+    "${templatefile("../../helm/chart/config.yaml", { jupyterhub_host = var.jupyterhub_host, namespace = var.environment, release = local.helm_release_name })}",
+    # "${file("../../helm/jupyterhub_opencensus_monitor.yaml")}",
     "${templatefile("../../helm/profiles.yaml", { python_image = var.python_image, r_image = var.r_image, gpu_pytorch_image = var.gpu_pytorch_image, gpu_tensorflow_image = var.gpu_tensorflow_image, qgis_image = var.qgis_image })}",
     # workaround https://github.com/hashicorp/terraform-provider-helm/issues/669
     "${templatefile("../../helm/kbatch-proxy-values.yaml", { jupyterhub_host = var.jupyterhub_host, dns_label = var.dns_label })}",
@@ -36,29 +36,29 @@ resource "helm_release" "dhub" {
   # }
 
   set {
-    name  = "daskhub.jupyterhub.hub.config.GenericOAuthenticator.oauth_callback_url"
+    name  = "daskhub.jupyterhub.hub.config.Auth0OAuthenticator.oauth_callback_url"
     value = "https://${var.jupyterhub_host}/compute/hub/oauth_callback"
   }
 
   set {
-    name  = "daskhub.jupyterhub.hub.config.GenericOAuthenticator.client_secret"
-    value = data.azurerm_key_vault_secret.id_client_secret.value
+    name  = "daskhub.jupyterhub.hub.config.Auth0OAuthenticator.client_secret"
+    value = data.azurerm_key_vault_secret.autho_client_secret.value
   }
 
-  set {
-    name  = "daskhub.jupyterhub.hub.extraEnv.AZURE_CLIENT_SECRET"
-    value = data.azurerm_key_vault_secret.azure_client_secret.value
-  }
+  # set {
+  #   name  = "daskhub.jupyterhub.hub.extraEnv.AZURE_CLIENT_SECRET"
+  #   value = data.azurerm_key_vault_secret.azure_client_secret.value
+  # }
 
-  set {
-    name  = "daskhub.jupyterhub.hub.extraEnv.PC_ID_TOKEN"
-    value = data.azurerm_key_vault_secret.pc_id_token.value
-  }
+  # set {
+  #   name  = "daskhub.jupyterhub.hub.extraEnv.PC_ID_TOKEN"
+  #   value = data.azurerm_key_vault_secret.pc_id_token.value
+  # }
 
-  set {
-    name  = "daskhub.jupyterhub.hub.extraEnv.APPLICATIONINSIGHTS_CONNECTION_STRING"
-    value = azurerm_application_insights.pc_compute.connection_string
-  }
+  # set {
+  #   name  = "daskhub.jupyterhub.hub.extraEnv.APPLICATIONINSIGHTS_CONNECTION_STRING"
+  #   value = azurerm_application_insights.pc_compute.connection_string
+  # }
 
   set {
     name  = "daskhub.jupyterhub.hub.services.dask-gateway.apiToken"
@@ -71,15 +71,15 @@ resource "helm_release" "dhub" {
   #   value = file("../../helm/chart/files/jupyterhub_opencensus_monitor.py")
   # }
 
-  set {
-    name  = "daskhub.jupyterhub.hub.services.opencensus-monitoring.environment.APPLICATIONINSIGHTS_CONNECTION_STRING"
-    value = azurerm_application_insights.pc_compute.connection_string
-  }
+  # set {
+  #   name  = "daskhub.jupyterhub.hub.services.opencensus-monitoring.environment.APPLICATIONINSIGHTS_CONNECTION_STRING"
+  #   value = azurerm_application_insights.pc_compute.connection_string
+  # }
 
-  set {
-    name  = "daskhub.jupyterhub.hub.services.opencensus-monitoring.environment.JUPYTERHUB_ENVIRONMENT"
-    value = var.environment
-  }
+  # set {
+  #   name  = "daskhub.jupyterhub.hub.services.opencensus-monitoring.environment.JUPYTERHUB_ENVIRONMENT"
+  #   value = var.environment
+  # }
 
   set {
     name  = "daskhub.jupyterhub.proxy.secretToken"
@@ -145,7 +145,7 @@ resource "helm_release" "dhub" {
 
 }
 
-data "azurerm_storage_account" "pc-compute" {
-  name                = "${replace(local.prefix, "-", "")}storage"
-  resource_group_name = "${local.prefix}-shared-rg"
-}
+# data "azurerm_storage_account" "pc-compute" {
+#   name                = "${replace(local.prefix, "-", "")}storage"
+#   resource_group_name = "${local.prefix}-shared-rg"
+# }

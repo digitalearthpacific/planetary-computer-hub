@@ -21,34 +21,6 @@ echo '{"@jupyterlab/notebook-extension:tracker": {"renderCellOnIdle": false,"num
 # Silence dask-gateway warning. Fixed in https://github.com/dask/dask-gateway/pull/416.
 echo 'import warnings; warnings.filterwarnings("ignore", "format_bytes")' >> /srv/conda/envs/notebook/lib/python3.8/site-packages/sitecustomize.py
 
-# The docker image puts the plugin files in /opt/conda/share
-# We move them into the home directory, if the plugin isn't already installed
-echo "[Adding QGIS STAC plugin]"
-mkdir -p $HOME/.local/share/QGIS/QGIS3/profiles/default/python/plugins
-
-if [ -d /opt/conda/share/qgis_stac ]; then
-    mv -n /opt/conda/share/qgis_stac $HOME/.local/share/QGIS/QGIS3/profiles/default/python/plugins/
-fi
-
-# Add an autostart entry for qgis
-echo "Adding qgis autostart"
-mkdir -p ~/.config/autostart
-cat <<EOF > ~/.config/autostart/qgis.desktop
-[Desktop Entry]
-Encoding=UTF-8
-Version=0.9.4
-Type=Application
-Name=qgis
-Comment=Startup qgis
-Exec=/opt/conda/bin/qgis
-OnlyShowIn=XFCE;
-RunHook=0
-StartupNotify=false
-Terminal=false
-Hidden=false
-EOF
-
-
 echo "Disabling news"
 mkdir -p /home/jovyan/.jupyter/lab/user-settings/@jupyterlab/apputils-extension/
 cat <<EOF > /home/jovyan/.jupyter/lab/user-settings/@jupyterlab/apputils-extension/notification.jupyterlab-settings

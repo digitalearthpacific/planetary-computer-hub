@@ -8,7 +8,7 @@ daskhub:
       podPriority:
         enabled: true
       userScheduler:
-        enabled: true
+        enabled: false
       corePods:
         nodeAffinity:
           matchNodePurpose: "require"
@@ -16,8 +16,8 @@ daskhub:
     hub:
       baseUrl: "/compute/"
       image:
-        name: pcccr.azurecr.io/jupyterhub/k8s-hub
-        tag: "1.0.1.post0"
+        name: jupyterhub/k8s-hub
+        tag: "1.0.1"
 
       networkPolicy:
         ingress:
@@ -33,37 +33,37 @@ daskhub:
         JupyterHub:
           admin_access: false
           admin_users:
-            - taugspurger@microsoft.com
+            - alex@auspatious.com
 
-          authenticator_class: generic-oauth
-        GenericOAuthenticator:
-          # oauth_callback_url, client_secret are set via terraform.
-          client_id: "YRKd72gJAcBEQMyyz8QnT9luJNKoRcCnF7TL4ffx"
-          login_service: 'planetarycomputer'
-          userdata_url: 'https://${oauth_host}.microsoft.com/id/users/userdata'
-          token_url: 'https://${oauth_host}.microsoft.com/id/o/token/'
-          authorize_url: 'https://${oauth_host}.microsoft.com/id/o/authorize/'
-          username_key: 'email'
-          userdata_method: 'GET'
+          authenticator_class: auth0
+        Auth0OAuthenticator:
+          client_id: Rsv3FLhBCrCBR9nu3qCGNSY6ay3ds4em
+          client_secret: client-secret-from-auth0-here
+          oauth_callback_url:  https://dep-staging.westeurope.cloudapp.azure.com/compute/hub/oauth_callback
+          scope:
+            - openid
+            - email
+          auth0_subdomain: digitalearthpacific-staging.eu
 
       extraEnv:
         # This service principal has read permission on Azure API management.
-        AZURE_TENANT_ID: "72f988bf-86f1-41af-91ab-2d7cd011db47"
-        AZURE_CLIENT_ID: "185e2bd5-f11e-490c-8849-7889951120b4"
+        # Disabled by Alex
+        # AZURE_TENANT_ID: "72f988bf-86f1-41af-91ab-2d7cd011db47"
+        # AZURE_CLIENT_ID: "185e2bd5-f11e-490c-8849-7889951120b4"
         # AZURE_CLIENT_SECRET, PC_ID_TOKEN, APPLICATIONINSIGHTS_CONNECTION_STRING are set via terraform
 
       extraFiles:
-        jupyterhub_opencensus_monitor:
-          mountPath: /usr/local/jupyterhub_opencensus_monitor.py
+        # jupyterhub_opencensus_monitor:
+        #   mountPath: /usr/local/jupyterhub_opencensus_monitor.py
           # TODO(https://github.com/hashicorp/terraform-provider-helm/issues/628): use set-file
           # Using jupyterhub_opencensus_monitor.yaml for now.
 
       services:
-        opencensus-monitoring:
-          command:
-            - python3
-            - /usr/local/jupyterhub_opencensus_monitor.py
-          admin: true
+        # opencensus-monitoring:
+        #   command:
+        #     - python3
+        #     - /usr/local/jupyterhub_opencensus_monitor.py
+        #   admin: true
         kbatch:
           # api_token and URL are set by terraform
           admin: true
@@ -96,70 +96,70 @@ daskhub:
           c.KubeSpawner.environment["DASK_GATEWAY__PUBLIC_ADDRESS"] = "https://${jupyterhub_host}/compute/services/dask-gateway/"
         templates: |
           c.JupyterHub.template_paths.insert(0, "/etc/jupyterhub/templates")
-        pre_spawn_hook: |
-          # Configure environment tailored to the specific user
-          # Sets the following
-          # 1. environment variable PC_SDK_SUBSCRIPTION_KEY
-          # ---------------------------------------------------
+        # pre_spawn_hook: |
+        #   # Configure environment tailored to the specific user
+        #   # Sets the following
+        #   # 1. environment variable PC_SDK_SUBSCRIPTION_KEY
+        #   # ---------------------------------------------------
 
-          async def pre_spawn_hook(spawner):
-              username = spawner.user.name
-              # `username` is an email address. We use that email address to look up the
-              # user in the Django App
-              import os
-              import requests
-              import azure.identity
-              import azure.mgmt.apimanagement
-              from traitlets.log import get_logger
+        #   async def pre_spawn_hook(spawner):
+        #       username = spawner.user.name
+        #       # `username` is an email address. We use that email address to look up the
+        #       # user in the Django App
+        #       import os
+        #       import requests
+        #       import azure.identity
+        #       import azure.mgmt.apimanagement
+        #       from traitlets.log import get_logger
 
-              log = get_logger()
-              log.info("starting pre_spawn_hook for %s" % username)
-              # The hub is configured with "service principal with secret" environment variables.
-              identity = azure.identity.EnvironmentCredential()
-              PC_ID_TOKEN = os.environ["PC_ID_TOKEN"]
+        #       log = get_logger()
+        #       log.info("starting pre_spawn_hook for %s" % username)
+        #       # The hub is configured with "service principal with secret" environment variables.
+        #       identity = azure.identity.EnvironmentCredential()
+        #       PC_ID_TOKEN = os.environ["PC_ID_TOKEN"]
 
-              r = requests.get(
-                  f"https://planetarycomputer.microsoft.com/id/users/users/{username}/",
-                  headers=dict(Authorization="Token %s" % PC_ID_TOKEN)
-              )
-              if r.status_code != 200:
-                  log.warning("pre_spawn_hook failed getting the user ID for %s. -- %s",
-                              username, r.content)
-                  return
+        #       r = requests.get(
+        #           f"https://planetarycomputer.microsoft.com/id/users/users/{username}/",
+        #           headers=dict(Authorization="Token %s" % PC_ID_TOKEN)
+        #       )
+        #       if r.status_code != 200:
+        #           log.warning("pre_spawn_hook failed getting the user ID for %s. -- %s",
+        #                       username, r.content)
+        #           return
 
-              pk = r.json()["pk"]
-              log.debug("Got PK %s", pk)
-              # This PK should match the PK in API management.
-              # The Hub pod is configured to talk to API Management
-              identity = azure.identity.DefaultAzureCredential()
-              apim_client = azure.mgmt.apimanagement.ApiManagementClient(
-                  identity,
-                  "9da7523a-cb61-4c3e-b1d4-afa5fc6d2da9"
-              )
+        #       pk = r.json()["pk"]
+        #       log.debug("Got PK %s", pk)
+        #       # This PK should match the PK in API management.
+        #       # The Hub pod is configured to talk to API Management
+        #       identity = azure.identity.DefaultAzureCredential()
+        #       apim_client = azure.mgmt.apimanagement.ApiManagementClient(
+        #           identity,
+        #           "9da7523a-cb61-4c3e-b1d4-afa5fc6d2da9"
+        #       )
 
-              # We can now request the subscription. These follow the pattern
-              # {id}-planetarycomputer
-              try:
-                  log.info("Getting subscriptions for %s-%s", username, pk)
-                  keys = apim_client.subscription.list_secrets(
-                      "pc-manual-resources", "planetarycomputer", f"{pk}-planetarycomputer"
-                  )
-              except Exception as e:
-                  log.exception("Failed to get secrets for %s", username)
-              else:
-                  spawner.environment["PC_SDK_SUBSCRIPTION_KEY"] = keys.primary_key
+        #       # We can now request the subscription. These follow the pattern
+        #       # {id}-planetarycomputer
+        #       try:
+        #           log.info("Getting subscriptions for %s-%s", username, pk)
+        #           keys = apim_client.subscription.list_secrets(
+        #               "pc-manual-resources", "planetarycomputer", f"{pk}-planetarycomputer"
+        #           )
+        #       except Exception as e:
+        #           log.exception("Failed to get secrets for %s", username)
+        #       else:
+        #           spawner.environment["PC_SDK_SUBSCRIPTION_KEY"] = keys.primary_key
 
-          c.KubeSpawner.pre_spawn_hook = pre_spawn_hook
+        #   c.KubeSpawner.pre_spawn_hook = pre_spawn_hook
 
     cull:
       enabled: true
-      maxAge: 86400  # 24 hours
+      maxAge: 3600
 
     proxy:
       https:
         enabled: true
         letsencrypt:
-          contactEmail: "taugspurger@microsoft.com"
+          contactEmail: "alex@auspatious.com"
 
       chp:
         networkPolicy:

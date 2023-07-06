@@ -13,7 +13,7 @@ variable "region" {
 
 variable "version_number" {
   type        = string
-  description = "The revisoin number of this deployment. Useful for migrating between AKS clusters."
+  description = "The revision number of this deployment. Useful for migrating between AKS clusters."
   default     = ""
 }
 
@@ -31,7 +31,6 @@ variable "aks_automatic_channel_upgrade" {
   type        = string
   description = "automatic_channel_upgrade"
 }
-
 
 variable "oauth_host" {
   type        = string
@@ -191,7 +190,7 @@ variable "azure_tenant_id" {
 # Local variables
 
 locals {
-  stack_id          = "pcc"
+  stack_id          = "dep"
   location          = lower(replace(var.region, " ", ""))
   prefix            = "${local.stack_id}-${local.location}"
   namespaced_prefix = "${local.stack_id}-${var.environment}"
