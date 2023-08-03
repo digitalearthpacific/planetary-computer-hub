@@ -1,6 +1,6 @@
 # Notes on deploying the Planetary Computer Hub to Azure
 
-## State storage 
+## State storage
 
 Set up a storage space for Terraform: https://learn.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli
 
@@ -74,6 +74,12 @@ Export key variables:
 AZURE_CLIENT_ID="253f51ab-a4ec-4dec-a462-266226d680e5",
 AZURE_CLIENT_SECRET="SECRET_ASK_ALEX",
 AZURE_TENANT_ID="f721524d-ea60-4048-bc46-757d4b5f9fe8"
+```
+
+Pick the appropriate account, i.e,:
+
+``` bash
+az account set --subscription "99ad928a-19f5-491b-ae04-620dc650944a"
 ```
 
 Run plan:
