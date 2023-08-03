@@ -13,7 +13,7 @@ daskhub:
             mem_guarantee: "25G"
             mem_limit: "32G"
             extra_resource_limits: {"nvidia.com/gpu": "0"}
-            default_url: "/lab/tree/PlanetaryComputerExamples/README.md"
+            default_url: "/lab/tree/depal/README.md"
             node_affinity_required:
               - matchExpressions:
                 - key: pc.microsoft.com/userkind
@@ -31,7 +31,7 @@ daskhub:
         #     mem_guarantee: "54G"
         #     mem_limit: "59G"
         #     extra_resource_limits: {"nvidia.com/gpu": "0"}
-        #     default_url: "/lab/tree/PlanetaryComputerExamples/README.md"
+        #     default_url: "/lab/tree/depal/README.md"
         #     node_affinity_required:
         #       - matchExpressions:
         #         - key: pc.microsoft.com/userkind
@@ -49,7 +49,7 @@ daskhub:
             mem_limit: "27G"
             mem_guarantee: "20G"
             extra_resource_limits: {"nvidia.com/gpu": "1"}
-            default_url: "/lab/tree/PlanetaryComputerExamples/README.md"
+            default_url: "/lab/tree/depal/README.md"
             tolerations:
               - key: 'nvidia.com/gpu'
                 operator: 'Equal'
@@ -76,7 +76,7 @@ daskhub:
         #     mem_limit: "27G"
         #     mem_guarantee: "20G"
         #     extra_resource_limits: {"nvidia.com/gpu": "1"}
-        #     default_url: "/lab/tree/PlanetaryComputerExamples/README.md"
+        #     default_url: "/lab/tree/depal/README.md"
         #     tolerations:
         #       - key: 'nvidia.com/gpu'
         #         operator: 'Equal'
