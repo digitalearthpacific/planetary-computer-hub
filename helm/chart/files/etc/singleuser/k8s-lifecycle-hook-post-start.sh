@@ -6,7 +6,7 @@ echo "Pulling examples"
 /srv/conda/envs/notebook/bin/gitpuller https://github.com/microsoft/PlanetaryComputerExamples main /home/jovyan/PlanetaryComputerExamples || true
 
 echo "Grabbing depal"
-/srv/conda/envs/notebook/bin/gitpuller https://github.com/digitalearthpacific main /home/jovyan/depal || true
+/srv/conda/envs/notebook/bin/gitpuller https://github.com/digitalearthpacific/depal main /home/jovyan/depal || true
 
 echo "Setting markdown config"
 # Ensure that markdown files are rendered by default.
