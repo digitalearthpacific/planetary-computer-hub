@@ -121,7 +121,6 @@ kubectl get pods -A
 You might need to change into the Helm directory and update the charts with
 `helm dependency update`.
 
-
 ## More
 
 Add GPU nodegroup, see [gpu.sh](scripts/gpu.sh)
@@ -159,4 +158,14 @@ az aks nodepool add --name gpuuser \
     --aks-custom-headers UseGPUDedicatedVHD=true \
     --labels hub.jupyter.org/node-purpose=user hub.jupyter.org/pool-name=user-alpha-pool pc.microsoft.com/userkind=gpu \
     --node-taints "hub.jupyter.org_dedicated=user:NoSchedule"
+```
+
+## Argo secrets
+
+``` bash
+# OAuth Secret for Argo Workflows
+az keyvault secret set \
+  --name=dep--argo-clientid-clientsecret \
+  --vault-name=dep-staging-secrets \
+  --value=CLIENT_ID:CLIENT_SECRET
 ```

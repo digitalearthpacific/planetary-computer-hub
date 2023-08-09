@@ -9,6 +9,12 @@ data "azurerm_key_vault_secret" "jupyterhub_proxy_secret_token" {
   key_vault_id = data.azurerm_key_vault.deploy_secrets.id
 }
 
+# Argo
+data "azurerm_key_vault_secret" "argo_server_sso" {
+  name         = "${local.stack_id}--argo-clientid-clientsecret"
+  key_vault_id = data.azurerm_key_vault.deploy_secrets.id
+}
+
 # # Django App
 # data "azurerm_key_vault_secret" "id_client_secret" {
 #   name         = "${local.stack_id}--id-client-secret"
