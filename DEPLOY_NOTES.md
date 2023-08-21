@@ -169,3 +169,30 @@ az keyvault secret set \
   --vault-name=dep-staging-secrets \
   --value=CLIENT_ID:CLIENT_SECRET
 ```
+
+## Posgres Password
+
+``` bash
+az keyvault secret set \
+  --name=dep-staging--postgres-password \
+  --vault-name=dep-staging-secrets \
+  --value="$(cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9-_\$' | fold -w 32 | sed 1q)"
+```
+
+## Grafana secrets
+
+```bash
+# username:password for grafana admin
+az keyvault secret set \
+  --name=dep--grafana-admin-secret \
+  --vault-name=dep-staging-secrets \
+  --value=grafana:LONG_SECRET
+```
+
+``` bash
+# OAuth Secret for Grafana
+az keyvault secret set \
+  --name=dep--grafana-clientid-clientsecret \
+  --vault-name=dep-staging-secrets \
+  --value=CLIENT_ID:CLIENT_SECRET
+```

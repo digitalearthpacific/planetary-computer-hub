@@ -1,0 +1,21 @@
+grafana:
+  grafana.ini:
+    database:
+      type: postgres
+      host: ${db_host}
+      user: ${db_user}
+      password: ${db_password}
+    auth.generic_oauth:
+      name: auth0
+      enabled: true
+      allow_sign_up: false
+      client_id: ${client_id}
+      client_secret: ${client_secret}
+      scopes: openid profile email groups
+      auth_url: https://digitalearthpacific-staging.eu.auth0.com/authorize
+      token_url: https://digitalearthpacific-staging.eu.auth0.com/oauth/token
+      api_url: https://digitalearthpacific-staging.eu.auth0.com/userinfo
+      use_pkce: true
+      allowed_groups: "DEP Admins"
+      # We only have one tier of users.`Viewer`is the other possible value
+      role_attribute_path: contains(groups[*], 'DEP Admins') && 'Editor' || 'Editor'

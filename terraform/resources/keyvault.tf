@@ -9,23 +9,6 @@ data "azurerm_key_vault_secret" "jupyterhub_proxy_secret_token" {
   key_vault_id = data.azurerm_key_vault.deploy_secrets.id
 }
 
-# Argo
-data "azurerm_key_vault_secret" "argo_server_sso" {
-  name         = "${local.stack_id}--argo-clientid-clientsecret"
-  key_vault_id = data.azurerm_key_vault.deploy_secrets.id
-}
-
-# # Django App
-# data "azurerm_key_vault_secret" "id_client_secret" {
-#   name         = "${local.stack_id}--id-client-secret"
-#   key_vault_id = data.azurerm_key_vault.deploy_secrets.id
-# }
-
-# data "azurerm_key_vault_secret" "pc_id_token" {
-#   name         = "${local.stack_id}--pc-id-token"
-#   key_vault_id = data.azurerm_key_vault.deploy_secrets.id
-# }
-
 # API Management integration
 data "azurerm_key_vault_secret" "autho_client_secret" {
   name         = "${local.stack_id}--autho-client-secret"
@@ -38,32 +21,20 @@ data "azurerm_key_vault_secret" "kbatch_server_api_token" {
   key_vault_id = data.azurerm_key_vault.deploy_secrets.id
 }
 
-# Velero integration
+# Argo
+data "azurerm_key_vault_secret" "argo_server_sso" {
+  name         = "${local.stack_id}--argo-clientid-clientsecret"
+  key_vault_id = data.azurerm_key_vault.deploy_secrets.id
+}
 
-# data "azurerm_key_vault_secret" "velero_azure_subscription_id" {
-#   name         = "${local.stack_id}--velero-azure-subscription-id"
-#   key_vault_id = data.azurerm_key_vault.deploy_secrets.id
-# }
+# Grafana
 
+data "azurerm_key_vault_secret" "grafana_admin_secret" {
+  name = "dep--grafana-admin-secret"
+  key_vault_id = data.azurerm_key_vault.deploy_secrets.id
+}
 
-# data "azurerm_key_vault_secret" "velero_azure_tenant_id" {
-#   name         = "${local.stack_id}--velero-azure-tenant-id"
-#   key_vault_id = data.azurerm_key_vault.deploy_secrets.id
-# }
-
-
-# data "azurerm_key_vault_secret" "velero_azure_client_id" {
-#   name         = "${local.stack_id}--velero-azure-client-id"
-#   key_vault_id = data.azurerm_key_vault.deploy_secrets.id
-# }
-
-
-# data "azurerm_key_vault_secret" "velero_azure_client_secret" {
-#   name         = "${local.stack_id}--velero-azure-client-secret"
-#   key_vault_id = data.azurerm_key_vault.deploy_secrets.id
-# }
-
-# data "azurerm_key_vault_secret" "microsoft_defender_log_analytics_workspace_id" {
-#   name         = "${local.stack_id}--microsoft-defender-log-analytics-workspace-id"
-#   key_vault_id = data.azurerm_key_vault.deploy_secrets.id
-# }
+data "azurerm_key_vault_secret" "grafana_clientid_clientsecret" {
+  name = "dep--grafana-clientid-clientsecret"
+  key_vault_id = data.azurerm_key_vault.deploy_secrets.id
+}

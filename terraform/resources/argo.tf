@@ -18,7 +18,7 @@ resource "kubernetes_secret" "argo_server_sso" {
   type = "Opaque"
 }
 
-# Create an azure storage account and container for argo to use in dev
+# Create an azure storage account and container for argo to use
 resource "azurerm_storage_account" "argo" {
   name                     = "${local.stack_id}${var.environment}storage"
   resource_group_name      = var.pc_resources_rg

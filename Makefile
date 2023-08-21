@@ -20,3 +20,6 @@ apply:
 		-var azure_tenant_id=${AZURE_TENANT_ID} \
 		-var pc_resources_kv=dep-staging-secrets \
 		-var pc_resources_rg=dep-staging
+
+init:
+	terraform -chdir=terraform/dep-staging init -upgrade
