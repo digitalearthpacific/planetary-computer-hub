@@ -35,7 +35,7 @@ resource "kubernetes_secret" "grafana_admin_credentials" {
 data "template_file" "grafana" {
   template = file("${path.module}/config/grafana.yaml")
   vars = {
-    db_host     = kubernetes_service.db_endpoint.spec[0].external_name
+    db_host     = "db-endpoint.db.svc.cluster.local"
     db_user     = split(":", data.azurerm_key_vault_secret.grafana_db_creds.value)[0]
     db_password = split(":", data.azurerm_key_vault_secret.grafana_db_creds.value)[1]
 

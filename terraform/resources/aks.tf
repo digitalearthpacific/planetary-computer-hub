@@ -111,6 +111,9 @@ resource "azurerm_kubernetes_cluster_node_pool" "argo_worker_pool" {
   node_labels = {
     "digitalearthpacific.org/node-purpose" = "argo",
   }
+  node_taints = [
+    "digitalearthpacific.org/node-purpose=argo:NoSchedule",
+  ]
 
   min_count = var.cpu_worker_pool_min_count
   max_count = var.cpu_worker_max_count
