@@ -16,6 +16,6 @@ grafana:
       token_url: https://digitalearthpacific-staging.eu.auth0.com/oauth/token
       api_url: https://digitalearthpacific-staging.eu.auth0.com/userinfo
       use_pkce: true
-      allowed_groups: "this is not implemented"
+      allowed_groups: "Argo Users"
       # We only have one tier of users.`Viewer`is the other possible value
-      role_attribute_path: contains(groups[*], 'DEP Admins') && 'Editor' || 'Editor'
+      role_attribute_path: contains(groups[*], 'Argo Users') && 'Editor' || 'Editor'

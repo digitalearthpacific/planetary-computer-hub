@@ -95,6 +95,41 @@ resource "azurerm_kubernetes_cluster_node_pool" "user_pool" {
   }
 }
 
+resource "azurerm_kubernetes_cluster_node_pool" "cpu_worker_pool" {
+  name                  = "cpuworker"
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.pc_compute.id
+  vm_size               = var.cpu_worker_vm_size
+  enable_auto_scaling   = true
+  os_disk_size_gb       = 128
+  orchestrator_version  = var.kubernetes_version
+  vnet_subnet_id        = azurerm_subnet.node_subnet.id
+  # priority              = "Spot"
+  # spot_max_price        = -1
+  # eviction_policy       = "Delete"
+
+  node_labels = {
+    "k8s.dask.org/dedicated"                = "worker",
+    "pc.microsoft.com/workerkind"           = "cpu",
+    "kubernetes.azure.com/scalesetpriority" = "spot"
+  }
+
+  node_taints = [
+    "kubernetes.azure.com/scalesetpriority=spot:NoSchedule",
+  ]
+
+  min_count = var.cpu_worker_pool_min_count
+  max_count = var.cpu_worker_max_count
+  tags = {
+    Environment = "Production"
+    ManagedBy   = "DEP"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      node_count,
+    ]
+  }
+}
 
 resource "azurerm_kubernetes_cluster_node_pool" "argo_worker_pool" {
   name                  = "argoworker"
@@ -125,10 +160,10 @@ resource "azurerm_kubernetes_cluster_node_pool" "argo_worker_pool" {
   }
 }
 
-resource "azurerm_kubernetes_cluster_node_pool" "cpu_worker_pool" {
-  name                  = "cpuworker"
+resource "azurerm_kubernetes_cluster_node_pool" "argo_worker_pool_d4" {
+  name                  = "argoworkerd4"
   kubernetes_cluster_id = azurerm_kubernetes_cluster.pc_compute.id
-  vm_size               = var.cpu_worker_vm_size
+  vm_size               = "Standard_D48s_v4"
   enable_auto_scaling   = true
   os_disk_size_gb       = 128
   orchestrator_version  = var.kubernetes_version
@@ -138,21 +173,14 @@ resource "azurerm_kubernetes_cluster_node_pool" "cpu_worker_pool" {
   # eviction_policy       = "Delete"
 
   node_labels = {
-    "k8s.dask.org/dedicated"                = "worker",
-    "pc.microsoft.com/workerkind"           = "cpu",
-    "kubernetes.azure.com/scalesetpriority" = "spot"
+    "digitalearthpacific.org/node-purpose" = "argo-d4",
   }
-
   node_taints = [
-    "kubernetes.azure.com/scalesetpriority=spot:NoSchedule",
+    "digitalearthpacific.org/node-purpose=argo:NoSchedule",
   ]
 
   min_count = var.cpu_worker_pool_min_count
   max_count = var.cpu_worker_max_count
-  tags = {
-    Environment = "Production"
-    ManagedBy   = "DEP"
-  }
 
   lifecycle {
     ignore_changes = [
