@@ -28,7 +28,6 @@ data "azurerm_key_vault_secret" "argo_server_sso" {
 }
 
 # Grafana
-
 data "azurerm_key_vault_secret" "grafana_admin_secret" {
   name = "dep--grafana-admin-secret"
   key_vault_id = data.azurerm_key_vault.deploy_secrets.id
@@ -36,5 +35,24 @@ data "azurerm_key_vault_secret" "grafana_admin_secret" {
 
 data "azurerm_key_vault_secret" "grafana_clientid_clientsecret" {
   name = "dep--grafana-clientid-clientsecret"
+  key_vault_id = data.azurerm_key_vault.deploy_secrets.id
+}
+
+data "azurerm_key_vault_secret" "grafana_db_creds" {
+  name = "dep--grafana-db-secret"
+  key_vault_id = data.azurerm_key_vault.deploy_secrets.id
+}
+
+# PGSTAC
+data "azurerm_key_vault_secret" "pgstac_db_creds_admin" {
+  name = "dep--pgstac-admin"
+  key_vault_id = data.azurerm_key_vault.deploy_secrets.id
+}
+data "azurerm_key_vault_secret" "pgstac_db_creds_read" {
+  name = "dep--pgstac-read"
+  key_vault_id = data.azurerm_key_vault.deploy_secrets.id
+}
+data "azurerm_key_vault_secret" "pgstac_db_creds_ingest" {
+  name = "dep--pgstac-ingest"
   key_vault_id = data.azurerm_key_vault.deploy_secrets.id
 }

@@ -32,9 +32,8 @@ resource "azurerm_kubernetes_cluster" "pc_compute" {
     # Managed for staging, since A-series VM don't support Ephemeral
     os_disk_type        = var.core_os_disk_type
     enable_auto_scaling = true
-    node_count          = 1
     min_count           = 1
-    max_count           = 1
+    max_count           = 5
     vnet_subnet_id      = azurerm_subnet.node_subnet.id
     node_labels = {
       "hub.jupyter.org/node-purpose" = "core"
@@ -96,6 +95,32 @@ resource "azurerm_kubernetes_cluster_node_pool" "user_pool" {
   }
 }
 
+
+resource "azurerm_kubernetes_cluster_node_pool" "argo_worker_pool" {
+  name                  = "argoworker"
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.pc_compute.id
+  vm_size               = var.cpu_worker_vm_size
+  enable_auto_scaling   = true
+  os_disk_size_gb       = 128
+  orchestrator_version  = var.kubernetes_version
+  vnet_subnet_id        = azurerm_subnet.node_subnet.id
+  # priority              = "Spot"
+  # spot_max_price        = -1
+  # eviction_policy       = "Delete"
+
+  node_labels = {
+    "digitalearthpacific.org/node-purpose" = "argo",
+  }
+
+  min_count = var.cpu_worker_pool_min_count
+  max_count = var.cpu_worker_max_count
+
+  lifecycle {
+    ignore_changes = [
+      node_count,
+    ]
+  }
+}
 
 resource "azurerm_kubernetes_cluster_node_pool" "cpu_worker_pool" {
   name                  = "cpuworker"

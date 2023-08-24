@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: postgresql-client
+  namespace: db
+  labels:
+    app: postgresql-client
+  annotations:
+    cluster-autoscaler.kubernetes.io/safe-to-evict: "true"    
+spec:
+  securityContext:
+    runAsNonRoot: true
+    supplementalGroups: [ 10001] 
+    fsGroup: 10001    
+  containers:
+    - name: postgresql-client
+      image: andreswebs/postgresql-client
+      imagePullPolicy: Always
+      securityContext:
+        runAsUser: 1000      
+      stdin: true
+      tty: true
+      command: ["/bin/sh"]
+      env:
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-admin-creds
+              key: password
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              name: db-admin-creds
+              key: username
+        - name: PGHOST
+          valueFrom:
+            secretKeyRef:
+              name: db-admin-creds
+              key: hostname

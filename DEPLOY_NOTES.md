@@ -176,7 +176,7 @@ az keyvault secret set \
 az keyvault secret set \
   --name=dep-staging--postgres-password \
   --vault-name=dep-staging-secrets \
-  --value="$(cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9-_\$' | fold -w 32 | sed 1q)"
+  --value="$(cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w 32 | sed 1q)"
 ```
 
 ## Grafana secrets
