@@ -5,7 +5,7 @@ provider "azurerm" {
 locals {
   resource_group = "dep-staging-rg"
   traefik_ip_address = "51.124.54.190"
-  applications = ["argo", "grafana", "titiler", "stac"]
+  applications = ["argo", "grafana", "titiler", "stac", "maps", "mosaic"]
 }
 
 # Load the existing Azure DNS zone

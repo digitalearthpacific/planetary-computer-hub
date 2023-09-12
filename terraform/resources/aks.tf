@@ -103,9 +103,9 @@ resource "azurerm_kubernetes_cluster_node_pool" "cpu_worker_pool" {
   os_disk_size_gb       = 128
   orchestrator_version  = var.kubernetes_version
   vnet_subnet_id        = azurerm_subnet.node_subnet.id
-  # priority              = "Spot"
-  # spot_max_price        = -1
-  # eviction_policy       = "Delete"
+  priority              = "Spot"
+  spot_max_price        = -1
+  eviction_policy       = "Delete"
 
   node_labels = {
     "k8s.dask.org/dedicated"                = "worker",
@@ -139,70 +139,12 @@ resource "azurerm_kubernetes_cluster_node_pool" "argo_worker_pool" {
   os_disk_size_gb       = 128
   orchestrator_version  = var.kubernetes_version
   vnet_subnet_id        = azurerm_subnet.node_subnet.id
-  # priority              = "Spot"
-  # spot_max_price        = -1
-  # eviction_policy       = "Delete"
+  priority              = "Spot"
+  spot_max_price        = -1
+  eviction_policy       = "Delete"
 
   node_labels = {
     "digitalearthpacific.org/node-purpose" = "argo",
-  }
-  node_taints = [
-    "digitalearthpacific.org/node-purpose=argo:NoSchedule",
-  ]
-
-  min_count = var.cpu_worker_pool_min_count
-  max_count = var.cpu_worker_max_count
-
-  lifecycle {
-    ignore_changes = [
-      node_count,
-    ]
-  }
-}
-
-resource "azurerm_kubernetes_cluster_node_pool" "argo_worker_pool_d2" {
-  name                  = "argoworkerd2"
-  kubernetes_cluster_id = azurerm_kubernetes_cluster.pc_compute.id
-  vm_size               = "Standard_DS15_v2"
-  enable_auto_scaling   = true
-  os_disk_size_gb       = 128
-  orchestrator_version  = var.kubernetes_version
-  vnet_subnet_id        = azurerm_subnet.node_subnet.id
-  # priority              = "Spot"
-  # spot_max_price        = -1
-  # eviction_policy       = "Delete"
-
-  node_labels = {
-    "digitalearthpacific.org/node-purpose" = "argo-d2",
-  }
-  node_taints = [
-    "digitalearthpacific.org/node-purpose=argo:NoSchedule",
-  ]
-
-  min_count = var.cpu_worker_pool_min_count
-  max_count = var.cpu_worker_max_count
-
-  lifecycle {
-    ignore_changes = [
-      node_count,
-    ]
-  }
-}
-
-resource "azurerm_kubernetes_cluster_node_pool" "argo_worker_pool_d3" {
-  name                  = "argoworkerd3"
-  kubernetes_cluster_id = azurerm_kubernetes_cluster.pc_compute.id
-  vm_size               = "standard_d48s_v3"
-  enable_auto_scaling   = true
-  os_disk_size_gb       = 128
-  orchestrator_version  = var.kubernetes_version
-  vnet_subnet_id        = azurerm_subnet.node_subnet.id
-  # priority              = "Spot"
-  # spot_max_price        = -1
-  # eviction_policy       = "Delete"
-
-  node_labels = {
-    "digitalearthpacific.org/node-purpose" = "argo-d3",
   }
   node_taints = [
     "digitalearthpacific.org/node-purpose=argo:NoSchedule",
@@ -226,9 +168,9 @@ resource "azurerm_kubernetes_cluster_node_pool" "argo_worker_pool_d4" {
   os_disk_size_gb       = 128
   orchestrator_version  = var.kubernetes_version
   vnet_subnet_id        = azurerm_subnet.node_subnet.id
-  # priority              = "Spot"
-  # spot_max_price        = -1
-  # eviction_policy       = "Delete"
+  priority              = "Spot"
+  spot_max_price        = -1
+  eviction_policy       = "Delete"
 
   node_labels = {
     "digitalearthpacific.org/node-purpose" = "argo-d4",
