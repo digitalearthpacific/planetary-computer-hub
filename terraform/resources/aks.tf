@@ -148,6 +148,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "argo_worker_pool" {
   }
   node_taints = [
     "digitalearthpacific.org/node-purpose=argo:NoSchedule",
+    "kubernetes.azure.com/scalesetpriority=spot:NoSchedule",
   ]
 
   min_count = var.cpu_worker_pool_min_count
@@ -177,6 +178,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "argo_worker_pool_d4" {
   }
   node_taints = [
     "digitalearthpacific.org/node-purpose=argo:NoSchedule",
+    "kubernetes.azure.com/scalesetpriority=spot:NoSchedule",
   ]
 
   min_count = var.cpu_worker_pool_min_count
