@@ -93,7 +93,7 @@ variable "qgis_image" {
 
 variable "user_vm_size" {
   type = string
-  # VM with 64G of RAM, 8 cores, and ssd base disk
+  # VM with 128G of RAM, 16 cores, and ssd base disk
   default     = "Standard_E8s_v3"
   description = "The VM size to use for the 'cpu_user' AKS nodepool."
 }
@@ -127,7 +127,7 @@ variable "cpu_worker_vm_size" {
 
 variable "cpu_worker_max_count" {
   type        = number
-  default     = 100
+  default     = 40
   description = "The maximum number of CPU worker nodes."
 }
 

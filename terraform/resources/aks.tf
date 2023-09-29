@@ -79,7 +79,40 @@ resource "azurerm_kubernetes_cluster_node_pool" "user_pool" {
   }
 
   min_count = var.user_pool_min_count
-  max_count = 100
+  max_count = 50
+
+  zones = []
+
+  tags = {
+    Environment = "Production"
+    ManagedBy   = "DEP"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      node_count,
+    ]
+  }
+}
+
+
+resource "azurerm_kubernetes_cluster_node_pool" "user_pool_2x" {
+  name                  = "user2x"
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.pc_compute.id
+  vm_size               = "Standard_E16s_v3"
+  enable_auto_scaling   = true
+  os_disk_size_gb       = 200
+  node_taints           = ["hub.jupyter.org_dedicated=user:NoSchedule"]
+  vnet_subnet_id        = azurerm_subnet.node_subnet.id
+
+  orchestrator_version = var.kubernetes_version
+  node_labels = {
+    "hub.jupyter.org/pool-name"    = "user-alpha-pool-2x",
+    "hub.jupyter.org/node-purpose" = "user",
+  }
+
+  min_count = var.user_pool_min_count
+  max_count = 20
 
   zones = []
 
@@ -96,7 +129,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "user_pool" {
 }
 
 resource "azurerm_kubernetes_cluster_node_pool" "cpu_worker_pool" {
-  name                  = "cpuworker"
+  name                  = "cpuworker2"
   kubernetes_cluster_id = azurerm_kubernetes_cluster.pc_compute.id
   vm_size               = var.cpu_worker_vm_size
   enable_auto_scaling   = true
@@ -131,6 +164,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "cpu_worker_pool" {
   }
 }
 
+
 resource "azurerm_kubernetes_cluster_node_pool" "argo_worker_pool" {
   name                  = "argoworker"
   kubernetes_cluster_id = azurerm_kubernetes_cluster.pc_compute.id
@@ -145,6 +179,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "argo_worker_pool" {
 
   node_labels = {
     "digitalearthpacific.org/node-purpose" = "argo",
+    "kubernetes.azure.com/scalesetpriority" = "spot"
   }
   node_taints = [
     "digitalearthpacific.org/node-purpose=argo:NoSchedule",
@@ -175,6 +210,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "argo_worker_pool_d4" {
 
   node_labels = {
     "digitalearthpacific.org/node-purpose" = "argo-d4",
+    "kubernetes.azure.com/scalesetpriority" = "spot"
   }
   node_taints = [
     "digitalearthpacific.org/node-purpose=argo:NoSchedule",
