@@ -33,7 +33,7 @@ resource "azurerm_kubernetes_cluster" "pc_compute" {
     os_disk_type        = var.core_os_disk_type
     enable_auto_scaling = true
     min_count           = 1
-    max_count           = 5
+    max_count           = 10
     vnet_subnet_id      = azurerm_subnet.node_subnet.id
     node_labels = {
       "hub.jupyter.org/node-purpose" = "core"
