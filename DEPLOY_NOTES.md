@@ -196,3 +196,12 @@ az keyvault secret set \
   --vault-name=dep-staging-secrets \
   --value=CLIENT_ID:CLIENT_SECRET
 ```
+
+## Secret for Terria bucket
+
+```bash
+az keyvault secret set \
+  --name=dep--terria-bucket-writer \
+  --vault-name=dep-staging-secrets \
+  --value=ACCESSKEY:SECRETKEY
+```

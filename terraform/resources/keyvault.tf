@@ -56,3 +56,9 @@ data "azurerm_key_vault_secret" "pgstac_db_creds_ingest" {
   name = "dep--pgstac-ingest"
   key_vault_id = data.azurerm_key_vault.deploy_secrets.id
 }
+
+# Terria
+data "azurerm_key_vault_secret" "terria_bucket_writer" {
+  name = "dep--terria-bucket-writer"
+  key_vault_id = data.azurerm_key_vault.deploy_secrets.id
+}
