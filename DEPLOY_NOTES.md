@@ -205,3 +205,13 @@ az keyvault secret set \
   --vault-name=dep-staging-secrets \
   --value=ACCESSKEY:SECRETKEY
 ```
+
+## Flux
+
+flux bootstrap github \
+  --token-auth \
+  --owner=digitalearthpacific \
+  --repository=dep-kubernetes-apps \
+  --branch=main \
+  --path=clusters/staging \
+  --personal

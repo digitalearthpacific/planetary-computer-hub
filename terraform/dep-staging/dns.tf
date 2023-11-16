@@ -4,7 +4,7 @@ provider "azurerm" {
 
 locals {
   resource_group     = "dep-staging-rg"
-  traefik_ip_address = "51.124.54.190"
+  traefik_ip_address = "20.23.46.156"
   applications       = ["argo", "grafana", "titiler", "stac", "stac-browser", "stac-api"]
 }
 
