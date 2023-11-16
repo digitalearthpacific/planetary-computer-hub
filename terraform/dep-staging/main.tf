@@ -7,7 +7,7 @@ module "resources" {
   # subscription = "Planetary Computer"
 
   # AKS ----------------------------------------------------------------------
-  kubernetes_version                                   = null
+  kubernetes_version                                   = "1.27.3"
   aks_azure_active_directory_role_based_access_control = true
   aks_automatic_channel_upgrade                        = "stable"
 
