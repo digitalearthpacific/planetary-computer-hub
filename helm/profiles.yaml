@@ -21,24 +21,24 @@ daskhub:
                   values:
                   - gpu
 
-        # # Python singleuser double-sized
-        # - display_name: "CPU - Python (2x)"
-        #   default: "False"
-        #   description: '8 cores, 64 GiB of memory. <a href="https://github.com/pangeo-data/pangeo-docker-images">Pangeo Notebook</a> environment.'
-        #   kubespawner_override:
-        #     image: "${python_image}"
-        #     cpu_guarantee: 6
-        #     cpu_limit: 8
-        #     mem_guarantee: "50G"
-        #     mem_limit: "64G"
-        #     extra_resource_limits: {"nvidia.com/gpu": "0"}
-        #     default_url: "/lab/tree/depal/README.md"
-        #     node_affinity_required:
-        #       - matchExpressions:
-        #         - key: pc.microsoft.com/userkind
-        #           operator: NotIn
-        #           values:
-        #           - gpu
+        # Python singleuser double-sized
+        - display_name: "CPU - Python (2x)"
+          default: "False"
+          description: '8 cores, 64 GiB of memory. <a href="https://github.com/pangeo-data/pangeo-docker-images">Pangeo Notebook</a> environment.'
+          kubespawner_override:
+            image: "${python_image}"
+            cpu_guarantee: 6
+            cpu_limit: 8
+            mem_guarantee: "50G"
+            mem_limit: "64G"
+            extra_resource_limits: {"nvidia.com/gpu": "0"}
+            default_url: "/lab/tree/depal/README.md"
+            node_affinity_required:
+              - matchExpressions:
+                - key: pc.microsoft.com/userkind
+                  operator: NotIn
+                  values:
+                  - gpu
 
 
         # # Python singleuser quadruple-sized
