@@ -78,53 +78,56 @@ resource "kubernetes_secret" "argo_storage" {
   type = "Opaque"
 }
 
-# # Get an existing storage account
-# TODO: HANDLE CROSS SUBSCRIPTION ACCESS
-# data "azurerm_storage_account" "deppcpublicstorage" {
-#   name                = "deppcpublicstorage"
-#   resource_group_name = "dep-pc-main-rg"
-# }
+# Get an existing storage account
+data "azurerm_storage_account" "deppcpublicstorage" {
+  provider            = azurerm.storage
+  name                = "deppcpublicstorage"
+  resource_group_name = "dep-pc-main-rg"
+}
 
-# data "azurerm_storage_container" "deppcpublicstorage_output" {
-#   name                  = "output"
-#   storage_account_name  = data.azurerm_storage_account.deppcpublicstorage.name
-# }
+data "azurerm_storage_container" "deppcpublicstorage_output" {
+  provider             = azurerm.storage
+  name                 = "output"
+  storage_account_name = data.azurerm_storage_account.deppcpublicstorage.name
+}
 
-# data "azurerm_storage_account_blob_container_sas" "deppcpublicstorage" {
-#   connection_string = data.azurerm_storage_account.deppcpublicstorage.primary_connection_string
-#   container_name    = data.azurerm_storage_container.deppcpublicstorage_output.name
-#   https_only        = true
+data "azurerm_storage_account_blob_container_sas" "deppcpublicstorage" {
+  provider          = azurerm.storage
+  connection_string = data.azurerm_storage_account.deppcpublicstorage.primary_connection_string
+  container_name    = data.azurerm_storage_container.deppcpublicstorage_output.name
+  https_only        = true
 
-#   start  = "2023-01-01"
-#   expiry = "2030-01-01"
+  start  = "2023-12-01"
+  expiry = "2025-01-01"
 
-#   permissions {
-#     read   = true
-#     add    = true
-#     create = true
-#     write  = true
-#     delete = true
-#     list   = true
-#   }
+  permissions {
+    read   = true
+    add    = true
+    create = true
+    write  = true
+    delete = true
+    list   = true
+  }
 
-#   cache_control       = "max-age=5"
-#   content_disposition = "inline"
-#   content_encoding    = "deflate"
-#   content_language    = "en-US"
-#   content_type        = "application/json"
-# }
+  cache_control       = "max-age=5"
+  content_disposition = "inline"
+  content_encoding    = "deflate"
+  content_language    = "en-US"
+  content_type        = "application/json"
+}
 
-# # Store the AZURE_STORAGE_KEY, AZURE_STORAGE_CONNECTION_STRING
-# resource "kubernetes_secret" "deppcpublicstorage_secret" {
-#   metadata {
-#     name      = "deppcpublicstorage-output-read-write"
-#     namespace = kubernetes_namespace.argo.metadata[0].name
-#   }
-#   data = {
-#     AZURE_STORAGE_KEY               = data.azurerm_storage_account.deppcpublicstorage.primary_access_key
-#     AZURE_STORAGE_CONNECTION_STRING = data.azurerm_storage_account.deppcpublicstorage.primary_connection_string
-#     AZURE_STORAGE_SAS_TOKEN         = data.azurerm_storage_account_blob_container_sas.deppcpublicstorage.sas
-#   }
+# Store the AZURE_STORAGE_KEY, AZURE_STORAGE_CONNECTION_STRING
+resource "kubernetes_secret" "deppcpublicstorage_secret" {
+  metadata {
+    name      = "deppcpublicstorage-output-read-write"
+    namespace = kubernetes_namespace.argo.metadata[0].name
+  }
+  data = {
+    AZURE_STORAGE_ACCOUNT           = data.azurerm_storage_account.deppcpublicstorage.name
+    AZURE_STORAGE_KEY               = data.azurerm_storage_account.deppcpublicstorage.primary_access_key
+    AZURE_STORAGE_CONNECTION_STRING = data.azurerm_storage_account.deppcpublicstorage.primary_connection_string
+    AZURE_STORAGE_SAS_TOKEN         = data.azurerm_storage_account_blob_container_sas.deppcpublicstorage.sas
+  }
 
-#   type = "Opaque"
-# }
+  type = "Opaque"
+}

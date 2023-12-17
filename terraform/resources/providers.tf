@@ -2,6 +2,12 @@ provider "azurerm" {
   features {}
 }
 
+provider "azurerm" {
+  alias           = "storage"
+  subscription_id = "b91e3470-ff50-4ea0-a0c7-b57006093805"
+  features {}
+}
+
 provider "helm" {
   # https://dev.to/danielepolencic/getting-started-with-terraform-and-kubernetes-on-azure-aks-3l4d
   kubernetes {

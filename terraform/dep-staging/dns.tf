@@ -1,3 +1,4 @@
+# We should be able to remove this... not sure why we can't!
 provider "azurerm" {
   features {}
 }
