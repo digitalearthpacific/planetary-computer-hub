@@ -2,7 +2,7 @@
 
 ## State storage
 
-Set up a storage space for Terraform: https://learn.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli
+Set up a [storage space for Terraform](https://learn.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage?tabs=azure-cli)
 
 ``` bash
 #!/bin/bash
@@ -107,6 +107,10 @@ terraform -chdir=terraform/dep-staging  apply \
 This may fail the first time, and you should set up a role assignment
 on the Kubernetes cluster to give the deployer (you, or the system account)
 "Azure Kubernetes Service RBAC Cluster Admin" permissions.
+
+``` bash
+az role assignment create --role "Azure Kubernetes Service RBAC Admin" --assignee alex@auspatious --scope $(az aks show -g dep-staging-rg -n dep-staging-cluster --query id -o tsv)
+```
 
 ## Connect to k8s
 

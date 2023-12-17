@@ -6,6 +6,7 @@ resource "azurerm_log_analytics_workspace" "pc_compute" {
   resource_group_name = azurerm_resource_group.pc_compute.name
   sku                 = "PerGB2018"
   tags                = {}
+  daily_quota_gb      = 5
 }
 
 resource "azurerm_log_analytics_solution" "pc_compute" {
