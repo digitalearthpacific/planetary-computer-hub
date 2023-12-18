@@ -62,3 +62,14 @@ data "azurerm_key_vault_secret" "terria_bucket_writer" {
   name = "dep--terria-bucket-writer"
   key_vault_id = data.azurerm_key_vault.deploy_secrets.id
 }
+
+# ODC
+data "azurerm_key_vault_secret" "odc_admin_credentials" {
+  name = "dep--odc-admin-db-secret"
+  key_vault_id = data.azurerm_key_vault.deploy_secrets.id
+}
+
+data "azurerm_key_vault_secret" "odc_read_credentials" {
+  name = "dep--odc-read-db-secret"
+  key_vault_id = data.azurerm_key_vault.deploy_secrets.id
+}

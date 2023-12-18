@@ -21,6 +21,6 @@ To get the creds, you can run this: `kubectl -n default get secret db-admin -o y
 
 Test your connection with:
 
-`PGPASSWORD=${ADMIN_PASSWORD} psql -h ${DB_HOSTNAME} -U ${ADMIN_USERNAME} -d rimrep`
+`PGPASSWORD=${ADMIN_PASSWORD} psql -h ${DB_HOSTNAME} -U ${ADMIN_USERNAME} -d dep`
 
 If you can connect, then you can run the init script.
