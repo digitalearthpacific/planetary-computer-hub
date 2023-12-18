@@ -7,6 +7,12 @@ resource "azurerm_kubernetes_cluster" "pc_compute" {
   sku_tier                  = "Standard"
   automatic_channel_upgrade = var.aks_automatic_channel_upgrade
 
+  # Not sure we want this, but it's an alternative to the
+  # traefik ingress controller we're using currently.
+  # ingress_application_gateway {
+  #   subnet_id = azurerm_subnet.node_subnet.id
+  # }
+
   oms_agent {
     log_analytics_workspace_id = azurerm_log_analytics_workspace.pc_compute.id
   }
