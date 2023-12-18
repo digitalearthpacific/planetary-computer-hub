@@ -63,9 +63,14 @@ PGPASSWORD=${ADMIN_PASSWORD} psql -h $DB_HOSTNAME -p $DB_PORT --username ${ADMIN
 # public
 PGPASSWORD=${ADMIN_PASSWORD} psql -h $DB_HOSTNAME -p $DB_PORT --username ${ADMIN_USERNAME} -d $NEW_DB -c \
     "GRANT SELECT ON ALL TABLES IN SCHEMA public TO $ODC_READ;"
-# # odc
-# PGPASSWORD=${ADMIN_PASSWORD} psql -h $DB_HOSTNAME -p $DB_PORT --username ${ADMIN_USERNAME} -d $NEW_DB -c \
-#     "GRANT SELECT ON ALL TABLES IN SCHEMA odc TO $ODC_READ;"
+
+# Manual grants...
+# GRANT USAGE ON SCHEMA agdc TO odc_read;
+# GRANT SELECT ON ALL TABLES IN SCHEMA agdc TO odc_read;
+
+# GRANT USAGE ON SCHEMA wms TO odc_read;
+# GRANT SELECT ON ALL TABLES IN SCHEMA wms TO odc_read;
+# ... after schema creation
 
 # Store the credentials on a secret on Azure
 echo "Adding credentials to secrets manager"
