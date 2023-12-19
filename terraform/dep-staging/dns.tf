@@ -3,10 +3,21 @@ provider "azurerm" {
   features {}
 }
 
+# TODO: get the load balancer IP from the kubernetes service
+
 locals {
   resource_group     = "dep-staging-rg"
-  traefik_ip_address = "20.103.24.245"
-  applications       = ["argo", "grafana", "titiler", "stac", "stac-browser", "stac-api", "ows"]
+  traefik_ip_address = "20.61.135.58"
+  # All the duplicates are due to the certificate issue Dec 2023 and can be removed in Jan 2024
+  applications = [
+    "argo", "argo-too",
+    "grafana", "grafana-too",
+    "titiler", "titiler-too",
+    "stac", "stac-too",
+    "stac-browser", "stac-browser-too",
+    "ows", "ows-too",
+    "maps"
+  ]
 }
 
 # Load the existing Azure DNS zone
