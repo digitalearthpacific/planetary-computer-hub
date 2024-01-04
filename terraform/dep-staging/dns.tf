@@ -15,7 +15,7 @@ locals {
     "titiler", "titiler-too",
     "stac", "stac-too",
     "stac-browser", "stac-browser-too",
-    "ows", "ows-too",
+    "ows",
     "maps"
   ]
 }

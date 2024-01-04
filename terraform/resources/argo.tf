@@ -97,7 +97,7 @@ data "azurerm_storage_account_blob_container_sas" "deppcpublicstorage" {
   container_name    = data.azurerm_storage_container.deppcpublicstorage_output.name
   https_only        = true
 
-  start  = "2023-12-01"
+  start  = "2024-01-01"
   expiry = "2025-01-01"
 
   permissions {
