@@ -16,7 +16,7 @@ module "resources" {
   core_os_disk_type         = "Managed"
   user_pool_min_count       = 0
   cpu_worker_pool_min_count = 0
-  cpu_worker_vm_size         = "Standard_D64as_v5"
+  cpu_worker_vm_size         = "Standard_D32as_v5"
 
   # Logs ---------------------------------------------------------------------
   workspace_id = "83dcaf36e047a90f"

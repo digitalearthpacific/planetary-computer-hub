@@ -155,7 +155,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "cpu_worker_pool" {
   ]
 
   min_count = var.cpu_worker_pool_min_count
-  max_count = var.cpu_worker_max_count
+  max_count = 10
   tags = {
     Environment = "Production"
     ManagedBy   = "DEP"
@@ -257,6 +257,39 @@ resource "azurerm_kubernetes_cluster_node_pool" "argo_worker_pool_d64" {
 
   min_count = var.cpu_worker_pool_min_count
   max_count = var.cpu_worker_max_count
+
+  lifecycle {
+    ignore_changes = [
+      node_count,
+    ]
+  }
+}
+
+
+resource "azurerm_kubernetes_cluster_node_pool" "argo_worker_pool_e48" {
+  name                  = "argoe48"
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.pc_compute.id
+  vm_size               = "Standard_E48_v4"  # 48 cores, 384 GB RAM
+  enable_auto_scaling   = true
+  os_disk_size_gb       = 128
+  orchestrator_version  = var.kubernetes_version
+  vnet_subnet_id        = azurerm_subnet.node_subnet.id
+  priority              = "Spot"
+  spot_max_price        = -1
+  eviction_policy       = "Delete"
+
+  node_labels = {
+    "kubernetes.azure.com/scalesetpriority" = "spot",
+    "digitalearthpacific.org/node-purpose" = "argo",
+    "digitalearthpacific.org/node-size" = "argo-e48"
+  }
+  node_taints = [
+    "digitalearthpacific.org/node-purpose=argo:NoSchedule",
+    "kubernetes.azure.com/scalesetpriority=spot:NoSchedule",
+  ]
+
+  min_count = var.cpu_worker_pool_min_count
+  max_count = 100
 
   lifecycle {
     ignore_changes = [

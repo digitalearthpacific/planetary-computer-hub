@@ -1,4 +1,4 @@
-# Notes on deploying the Planetary Computer Hub to Azure
+# Notes on deploying the Planetary Computer Hub to Azure for DEP
 
 ## State storage
 

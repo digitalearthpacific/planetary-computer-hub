@@ -127,7 +127,7 @@ variable "cpu_worker_vm_size" {
 
 variable "cpu_worker_max_count" {
   type        = number
-  default     = 40
+  default     = 60
   description = "The maximum number of CPU worker nodes."
 }
 

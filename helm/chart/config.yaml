@@ -153,7 +153,8 @@ daskhub:
 
     cull:
       enabled: true
-      maxAge: 3600
+      timeout: 7200 # --timeout
+      every: 600 # --cull-every
 
     proxy:
       https:
@@ -315,7 +316,7 @@ daskhub:
 
       extraConfig:
         01-idle: |
-          c.KubeClusterConfig.idle_timeout = 30 * 60  # seconds. Bumped to 30 minutes by Alex L
+          c.KubeClusterConfig.idle_timeout = 30 * 60  # seconds. Bumped to 60 minutes by Alex L
           c.KubeClusterConfig.cluster_max_cores = 100  # 50 nodes @ 8 workers / node, 1 core / worker
           c.KubeClusterConfig.cluster_max_memory = "800 G"  # 8 GiB / core
           c.KubeClusterConfig.cluster_max_workers = 100  # 1 core, 8 GiB / worker
