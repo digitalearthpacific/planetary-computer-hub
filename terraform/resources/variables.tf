@@ -168,22 +168,22 @@ variable "maybe_versioned_prefix" {
   description = "Temporary hack"
 }
 
-variable "azure_client_id" {
-  type        = string
-  description = "Temporary variable for dynamic provider."
-}
+# variable "azure_client_id" {
+#   type        = string
+#   description = "Temporary variable for dynamic provider."
+# }
 
-variable "azure_client_secret" {
-  type        = string
-  default     = ""
-  description = "Temporary variable for dynamic provider."
-}
+# variable "azure_client_secret" {
+#   type        = string
+#   default     = ""
+#   description = "Temporary variable for dynamic provider."
+# }
 
-variable "azure_tenant_id" {
-  type        = string
-  default     = ""
-  description = "Temporary variable for dynamic provider."
-}
+# variable "azure_tenant_id" {
+#   type        = string
+#   default     = ""
+#   description = "Temporary variable for dynamic provider."
+# }
 
 
 # -----------------

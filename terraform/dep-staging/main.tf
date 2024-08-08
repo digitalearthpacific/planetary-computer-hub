@@ -16,7 +16,7 @@ module "resources" {
   core_os_disk_type         = "Managed"
   user_pool_min_count       = 0
   cpu_worker_pool_min_count = 0
-  cpu_worker_vm_size         = "Standard_D32as_v5"
+  cpu_worker_vm_size        = "Standard_D32as_v5"
 
   # Logs ---------------------------------------------------------------------
   workspace_id = "83dcaf36e047a90f"
@@ -38,11 +38,11 @@ module "resources" {
 
   kbatch_proxy_url = "http://dhub-staging-kbatch-proxy.staging.svc.cluster.local"
 
-  azure_client_id     = var.azure_client_id
-  azure_client_secret = var.azure_client_secret
-  azure_tenant_id     = var.azure_tenant_id
-  pc_resources_kv     = var.pc_resources_kv
-  pc_resources_rg     = var.pc_resources_rg
+  # azure_client_id     = var.azure_client_id
+  # azure_client_secret = var.azure_client_secret
+  # azure_tenant_id     = var.azure_tenant_id
+  pc_resources_kv = var.pc_resources_kv
+  pc_resources_rg = var.pc_resources_rg
 }
 
 terraform {
@@ -59,15 +59,15 @@ output "resources" {
   sensitive = true
 }
 
-variable "azure_client_id" {
-  type = string
-}
-variable "azure_client_secret" {
-  type = string
-}
-variable "azure_tenant_id" {
-  type = string
-}
+# variable "azure_client_id" {
+#   type = string
+# }
+# variable "azure_client_secret" {
+#   type = string
+# }
+# variable "azure_tenant_id" {
+#   type = string
+# }
 variable "pc_resources_kv" {
   type = string
 }
